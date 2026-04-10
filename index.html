@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Acordes de Guitarra — Luisga Martínez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:      #0a0a0a;
+    --surface: #111111;
+    --card:    #161616;
+    --border:  #222222;
+    --border2: #2e2e2e;
+    --yellow:  #F5C400;
+    --yellow2: #ffd84d;
+    --text:    #ffffff;
+    --muted:   #555555;
+    --muted2:  #888888;
+    --red:     #c0392b;
+    --green:   #27ae60;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body:    'Montserrat', sans-serif;
+    --radius:  12px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+  }
+
+  /* ── NAV ───────────────────────────────────── */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    color: var(--text);
+  }
+  .logo span { color: var(--yellow); }
+  .nav-tag {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    font-weight: 500;
+  }
+
+  /* ── HERO ──────────────────────────────────── */
+  .hero {
+    padding: 3rem 2rem 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-tag {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: var(--yellow); }
+  .hero p {
+    font-size: 14px;
+    color: var(--muted2);
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  /* ── MAIN ──────────────────────────────────── */
+  main { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .selector-block { margin-bottom: 1.75rem; }
+
+  .btn-group { display: flex; flex-wrap: wrap; gap: 7px; }
+
+  .sel-btn {
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--muted2);
+    font-size: 12px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color .15s, color .15s, background .15s;
+    letter-spacing: 0.04em;
+  }
+  .sel-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+  .sel-btn.active {
+    background: var(--yellow);
+    border-color: var(--yellow);
+    color: #0a0a0a;
+    font-weight: 700;
+  }
+
+  .divider { height: 1px; background: var(--border); margin: 0.5rem 0 2rem; }
+
+  /* ── RESULTS ───────────────────────────────── */
+  #resultsArea { min-height: 220px; }
+
+  .placeholder {
+    text-align: center;
+    padding: 5rem 0;
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    letter-spacing: 0.1em;
+    color: var(--border2);
+  }
+
+  .loading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4rem 0;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--yellow);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .result-header { margin-bottom: 1.5rem; }
+  .chord-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+  .chord-title .root { color: var(--yellow); }
+  .chord-sub {
+    font-size: 11px;
+    color: var(--muted2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 5px;
+    font-weight: 500;
+  }
+
+  .diagrams-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  @media (min-width: 560px) {
+    .diagrams-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .d-card {
+    background: var(--card);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 14px 8px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: border-color .2s, transform .15s;
+    cursor: default;
+  }
+  .d-card:hover {
+    border-color: var(--yellow);
+    transform: translateY(-2px);
+  }
+  .d-label {
+    font-size: 10px;
+    color: var(--muted2);
+    margin-bottom: 10px;
+    text-align: center;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+    line-height: 1.35;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .error-msg {
+    color: #e74c3c;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    padding: 3rem 0;
+    font-weight: 500;
+  }
+
+  /* ── FOOTER ────────────────────────────────── */
+  footer {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    border-top: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  footer span { color: var(--yellow); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">LUISGA <span>MARTÍNEZ</span></div>
+  <div class="nav-tag">Guitarrista · Educador · Compositor</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Herramienta gratuita</div>
+  <h1>ACORDES DE <span>GUITARRA</span></h1>
+  <p>Selecciona una nota y un tipo de acorde para ver las 4 formas más comunes de tocarlo en el mástil.</p>
+</div>
+
+<main>
+  <div class="selector-block">
+    <div class="section-label">Nota raíz</div>
+    <div class="btn-group" id="rootGrid"></div>
+  </div>
+
+  <div class="selector-block">
+    <div class="section-label">Tipo de acorde</div>
+    <div class="btn-group" id="qualityGrid"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div id="resultsArea">
+    <div class="placeholder">← ELIGE UN ACORDE</div>
+  </div>
+</main>
+
+<footer>
+  Hecho con ♪ por <span>Luisga Martínez</span> · Desbloquea tu Potencial Musical
+</footer>
+
+<script>
+const ROOTS = ['A','A#/Bb','B','C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab'];
+const QUALITIES = [
+  { id:'M',     label:'M',        desc:'mayor' },
+  { id:'m',     label:'m',        desc:'menor' },
+  { id:'7',     label:'7',        desc:'dominante séptima' },
+  { id:'maj7',  label:'maj7',     desc:'mayor séptima' },
+  { id:'m7b5',  label:'m7(b5)',   desc:'semidisminuido' },
+  { id:'dim7',  label:'º7',       desc:'disminuido séptimo' },
+  { id:'mmaj7', label:'m(maj7)',  desc:'menor mayor séptima' },
+  { id:'m6',    label:'m6',       desc:'menor sexta' },
+  { id:'m7',    label:'m7',       desc:'menor séptima' },
+];
+
+let selRoot = null, selQuality = null;
+
+function buildUI() {
+  ROOTS.forEach(r => {
+    const b = makeBtn(r, () => { selRoot = r; activate('rootGrid', b); maybeSearch(); });
+    document.getElementById('rootGrid').appendChild(b);
+  });
+  QUALITIES.forEach(q => {
+    const b = makeBtn(q.label, () => { selQuality = q; activate('qualityGrid', b); maybeSearch(); });
+    document.getElementById('qualityGrid').appendChild(b);
+  });
+}
+
+function makeBtn(text, onClick) {
+  const b = document.createElement('button');
+  b.className = 'sel-btn';
+  b.textContent = text;
+  b.onclick = onClick;
+  return b;
+}
+
+function activate(gridId, btn) {
+  document.getElementById(gridId).querySelectorAll('.sel-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function maybeSearch() {
+  if (selRoot && selQuality) fetchVoicings();
+}
+
+async function fetchVoicings() {
+  const area = document.getElementById('resultsArea');
+  area.innerHTML = `<div class="loading"><div class="spinner"></div>Buscando voicings para ${selRoot} ${selQuality.label}…</div>`;
+
+  try {
+    const resp = await fetch('/api/voicings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ root: selRoot, qualityId: selQuality.id, qualityDesc: selQuality.desc })
+    });
+    if (!resp.ok) throw new Error(`Error ${resp.status}`);
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error);
+    renderResults(data);
+  } catch(e) {
+    area.innerHTML = `<div class="error-msg">Error al cargar voicings: ${e.message}</div>`;
+  }
+}
+
+function renderResults(result) {
+  const area = document.getElementById('resultsArea');
+  area.innerHTML = `
+    <div class="result-header">
+      <div class="chord-title">
+        <span class="root">${selRoot}</span> ${selQuality.label}
+      </div>
+      <div class="chord-sub">${result.chordName} · ${selQuality.desc}</div>
+    </div>
+    <div class="diagrams-grid" id="dGrid"></div>
+  `;
+  const grid = document.getElementById('dGrid');
+  (result.voicings || []).slice(0, 4).forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'd-card';
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.style.display = 'block';
+    card.innerHTML = `<div class="d-label">${v.name}</div>`;
+    card.appendChild(svg);
+    grid.appendChild(card);
+    drawDiagram(svg, v);
+  });
+}
+
+function drawDiagram(svg, voicing) {
+  const { strings, fretOffset = 1, barre } = voicing;
+  const W = 140, H = 168;
+  const ml = 24, mt = 28;
+  const sw = 88, sh = 110;
+  const sGap = sw / 5, fGap = sh / 5;
+  const r = 8;
+  const nutH = fretOffset === 1 ? 5 : 0;
+  const baseY = mt + nutH;
+
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+
+  let h = '';
+
+  /* Open / mute indicators */
+  for (let s = 0; s < 6; s++) {
+    const x = ml + s * sGap;
+    const v = strings[s];
+    if (v === null)
+      h += `<text x="${x}" y="${mt-8}" text-anchor="middle" font-size="11" font-family="Montserrat,sans-serif" fill="#c0392b" font-weight="700">X</text>`;
+    else if (v === 0)
+      h += `<text x="${x}" y="${mt-8}" text-anchor="middle" font-size="12" font-family="Montserrat,sans-serif" fill="#F5C400" font-weight="600">O</text>`;
+  }
+
+  /* Nut or fret offset label */
+  if (fretOffset === 1) {
+    h += `<rect x="${ml}" y="${mt}" width="${sw}" height="${nutH}" rx="1" fill="#ffffff" opacity="0.85"/>`;
+  } else {
+    h += `<text x="${ml-5}" y="${baseY + fGap * 0.6}" text-anchor="end" font-size="8" font-family="Montserrat,sans-serif" fill="#555">${fretOffset}fr</text>`;
+  }
+
+  /* Fret lines */
+  for (let f = 0; f <= 5; f++) {
+    const y = baseY + f * fGap;
+    h += `<line x1="${ml}" y1="${y}" x2="${ml+sw}" y2="${y}" stroke="#2a2a2a" stroke-width="0.8"/>`;
+  }
+
+  /* String lines */
+  for (let s = 0; s < 6; s++) {
+    const x = ml + s * sGap;
+    const thick = (0.5 + (5 - s) * 0.32).toFixed(2);
+    h += `<line x1="${x}" y1="${baseY}" x2="${x}" y2="${baseY + 5 * fGap}" stroke="#444" stroke-width="${thick}"/>`;
+  }
+
+  /* String name labels at bottom */
+  const sNames = ['E','A','D','G','B','e'];
+  for (let s = 0; s < 6; s++) {
+    const x = ml + s * sGap;
+    h += `<text x="${x}" y="${baseY + 5 * fGap + 14}" text-anchor="middle" font-size="8" font-family="Montserrat,sans-serif" fill="#444">${sNames[s]}</text>`;
+  }
+
+  /* Barre bar */
+  if (barre) {
+    const fp = barre - fretOffset + 1;
+    if (fp >= 1 && fp <= 5) {
+      const y = baseY + (fp - 0.5) * fGap;
+      h += `<rect x="${ml}" y="${y - r + 2}" width="${sw}" height="${(r-2)*2}" rx="${r-3}" fill="#F5C400" opacity="0.9"/>`;
+    }
+  }
+
+  /* Finger dots */
+  for (let s = 0; s < 6; s++) {
+    const v = strings[s];
+    if (!v || v === 0) continue;
+    const fp = v - fretOffset + 1;
+    if (fp < 1 || fp > 5) continue;
+    const x = ml + s * sGap;
+    const y = baseY + (fp - 0.5) * fGap;
+    h += `<circle cx="${x}" cy="${y}" r="${r}" fill="#F5C400"/>`;
+    h += `<circle cx="${x}" cy="${y}" r="${r * 0.38}" fill="#0a0a0a" opacity="0.5"/>`;
+  }
+
+  svg.innerHTML = h;
+}
+
+buildUI();
+</script>
+</body>
+</html>

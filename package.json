@@ -1,0 +1,13 @@
+{
+  "name": "acordes-guitarra-luisga",
+  "version": "1.0.0",
+  "description": "App de diagramas de acordes para guitarra — Luisga Martínez",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "@anthropic-ai/sdk": "^0.20.0"
+  }
+}
